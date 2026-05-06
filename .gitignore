@@ -1,3 +1,6 @@
+*.csv
+obj/
+*.o
 *.png
 highlife.py
 highlife-versao-2.0.py

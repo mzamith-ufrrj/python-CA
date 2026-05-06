@@ -110,13 +110,15 @@ def condicao_inicial(CA_Y, CA_X, prob):
 Função principal - primeira a ser chamada
 '''
 if __name__ == '__main__':
-    width  = 1024
-    height = 768
+    width  = 800
+    height = 600
     FPS    = 60
+
     CA_X   = 150
     CA_Y   = 150
     max_time_step = 3000
-    prob = (1.0-0.125)
+    prob = 0.25
+
     plot_file_name = f"GOL-{CA_X}-{CA_Y}-{max_time_step}-{prob}.png"
 
     CA_matriz_0, CA_matriz_1 = condicao_inicial(CA_Y, CA_X, prob)
@@ -153,11 +155,11 @@ if __name__ == '__main__':
                     y = j  * deltaY
                     pygame.draw.rect(gameDisplay, (255, 255, 255), (x + 1, y + 1, deltaX - 2, deltaY - 2), 0)
 
-        for j in range(1, CA_Y):
-            pygame.draw.line(gameDisplay, (255, 0, 0), (0, j * deltaY), (width, j * deltaY))
+        #for j in range(1, CA_Y):
+        #    pygame.draw.line(gameDisplay, (255, 0, 0), (0, j * deltaY), (width, j * deltaY))
 
-        for i in range(1, CA_X):
-            pygame.draw.line(gameDisplay, (255, 0, 0), (i * deltaX, 0), (i * deltaX, height))
+        #for i in range(1, CA_X):
+        #    pygame.draw.line(gameDisplay, (255, 0, 0), (i * deltaX, 0), (i * deltaX, height))
             #for i in range(0, CA_X - 1):
 
         for e in pygame.event.get():
@@ -173,12 +175,14 @@ if __name__ == '__main__':
         if update:
             tempo = tempo + 1
             if tempo == max_time_step:
-                running = False
+                update = False
             funcao_transicao_circular(CA_matriz_0, CA_matriz_1, CA_Y, CA_X)
             #funcao_transicao_constante(CA_matriz_0, CA_matriz_1, CA_Y, CA_X)
+
             aux = CA_matriz_1
             CA_matriz_1 = CA_matriz_0
             CA_matriz_0 = aux
+
             estatistica = add_estatistica(tempo, CA_matriz_0, CA_Y, CA_X)
             vetor_estatistica.append(estatistica)
 
@@ -188,7 +192,7 @@ if __name__ == '__main__':
         pygame.display.flip()
 
     '''
-        
+
             if e.type == pygame.MOUSEBUTTONDOWN:
                 (mouseX, mouseY) = pygame.mouse.get_pos()
                 if(btn.collidepoint((mouseX, mouseY))):
@@ -210,6 +214,7 @@ if __name__ == '__main__':
 
 
     #end main loop
+
     pygame.quit()
     df = pd.DataFrame(vetor_estatistica, columns=['timestep', 'densidade', 'entropia'])
 
@@ -230,7 +235,7 @@ if __name__ == '__main__':
     ax2.grid(True)
 
     plt.tight_layout()
-    plt.savefig(plot_file_name, dpi=300)
+    #plt.savefig(plot_file_name, dpi=300)
     print(f"\t - Arquivo salvo: {plot_file_name}")
     plt.show()
     print("End the game")
